@@ -1,0 +1,17 @@
+const imageInput = document.getElementById('imageInput');
+const outputDiv = document.getElementById('output');
+
+imageInput.addEventListener('change', async () => {
+  const file = imageInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async () => {
+    outputDiv.textContent = '読み取り中...';
+    const result = await Tesseract.recognize(reader.result, 'jpn', {
+      logger: m => console.log(m)
+    });
+    outputDiv.textContent = result.data.text;
+  };
+  reader.readAsDataURL(file);
+});
